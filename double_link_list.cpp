@@ -50,17 +50,19 @@ void push_back(int value)
 
 void push_mid(int value, int searchKey)
 {
+	//create node
 	struct tnode *node = (tnode*)malloc(sizeof(tnode));
 	node->x = value;
 	
+	//checking first node
 	if(head == NULL)
 	{
 		head = tail = node;
 		tail->next = NULL;
-	}
+        tail->prev = NULL;}
 	else
 	{
-		struct tnode *curr = head;
+		curr = head;
 		while(curr!=NULL)
 		{
 			if(curr->x==searchKey)
@@ -70,9 +72,13 @@ void push_mid(int value, int searchKey)
 					push_back(value);
 				}
 				else
-				{
-					node->next = curr->next;
+				{	
+					lNode = curr->next;
 					curr->next = node;
+					lNode->prev = node;
+					node->next = lNode;
+					node->prev = curr;
+
 				}
 				break;
 			}
@@ -145,6 +151,37 @@ void del_front()
 		{
 			struct tnode *del = head;
 			head = head->next;
+			free(del);
+		}
+	}
+}
+
+void del_mid()
+{
+	if(head==NULL)
+	{
+		printf("There is no data\n");
+		//return;
+	}
+	else
+	{
+		if(head==tail)
+		{
+			free(head);
+			head=tail=NULL;
+		}
+		else
+		{
+			del = head;
+			while(del->next!=tail)
+			{
+				del = del->next;
+			}
+			
+			lNode = del->prev;
+			lNode->next = tail;
+			tail->prev = lNode;
+			tail->next = NULL;
 			free(del);
 		}
 	}
